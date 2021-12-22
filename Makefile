@@ -157,14 +157,14 @@ out/macho/.keep:
 
 $(MIMALLOC_LIB):
 	mkdir -p out/mimalloc
-	(cd out/mimalloc; CFLAGS=-DMI_USE_ENVIRON=0 cmake -G'Unix Makefiles' ../../third-party/mimalloc)
+	(cd out/mimalloc; CFLAGS=-DMI_USE_ENVIRON=0 cmake -G'Unix Makefiles' -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="$(CXXFLAGS)" ../../third-party/mimalloc)
 	$(MAKE) -C out/mimalloc mimalloc-static
 
 $(TBB_LIB):
 	mkdir -p out/tbb
-	(cd out/tbb; cmake -G'Unix Makefiles' -DBUILD_SHARED_LIBS=OFF -DTBB_TEST=OFF -DCMAKE_CXX_FLAGS=-D__TBB_DYNAMIC_LOAD_ENABLED=0 -DTBB_STRICT=OFF ../../third-party/tbb)
+	(cd out/tbb; cmake -G'Unix Makefiles' -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DTBB_TEST=OFF -DCMAKE_CXX_FLAGS="-D__TBB_DYNAMIC_LOAD_ENABLED=0 $(CXXFLAGS)" -DTBB_STRICT=OFF ../../third-party/tbb)
 	$(MAKE) -C out/tbb tbb
-	(cd out/tbb; ln -sf *_relwithdebinfo libs)
+	(cd out/tbb; ln -sf *_release libs)
 
 $(XXHASH_LIB):
 	$(MAKE) -C third-party/xxhash libxxhash.a
